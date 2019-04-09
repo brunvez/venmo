@@ -1,3 +1,11 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1, defaults: { format: :json } do
+      scope 'user/:user_id' do
+        resource :balance, only: :show
+        resource :feed, only: :show
+        resources :payments, only: :create
+      end
+    end
+  end
 end
