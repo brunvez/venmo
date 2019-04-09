@@ -10,22 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_175647) do
+ActiveRecord::Schema.define(version: 2019_04_09_142344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", force: :cascade do |t|
-    t.bigint "users_id"
-    t.integer "balance"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_accounts_on_users_id"
-  end
-
   create_table "friendships", force: :cascade do |t|
-    t.integer "first_user_id"
-    t.integer "second_user_id"
+    t.integer "first_user_id", null: false
+    t.integer "second_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["first_user_id"], name: "index_friendships_on_first_user_id"
@@ -34,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_04_08_175647) do
 
   create_table "payment_accounts", force: :cascade do |t|
     t.bigint "user_id"
-    t.integer "balance"
+    t.float "balance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_payment_accounts_on_user_id"
@@ -43,9 +35,10 @@ ActiveRecord::Schema.define(version: 2019_04_08_175647) do
   create_table "payments", force: :cascade do |t|
     t.integer "sender_id", null: false
     t.integer "receiver_id", null: false
-    t.integer "amount"
+    t.float "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
     t.index ["receiver_id"], name: "index_payments_on_receiver_id"
     t.index ["sender_id"], name: "index_payments_on_sender_id"
   end
@@ -58,7 +51,6 @@ ActiveRecord::Schema.define(version: 2019_04_08_175647) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "accounts", "users", column: "users_id"
   add_foreign_key "friendships", "users", column: "first_user_id"
   add_foreign_key "friendships", "users", column: "second_user_id"
   add_foreign_key "payment_accounts", "users"

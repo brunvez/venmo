@@ -7,3 +7,6 @@ en:
           already_friends: 'You and that user are already friends'
         payment:
           cannot_send_payment_to_yourself: 'You cannot send a payment to yourself'
+          amount_not_in_range: 'must be between %{min} and %{max}'
+      not_found: 'Record not found'
+      missing_param: 'A required param is missing'
