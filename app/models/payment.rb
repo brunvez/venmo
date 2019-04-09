@@ -10,6 +10,7 @@ class Payment < ApplicationRecord
   }
   validate :no_self_payment
 
+  scope :ordered_by_date, -> { order(created_at: :desc) }
   private
 
   def no_self_payment

@@ -1,5 +1,13 @@
 class PaymentsService
   class << self
+    def payments_for_user(user, max, offset)
+      user
+        .sent_payments
+        .or(user.received_payments)
+        .limit(max)
+        .offset(offset)
+    end
+
     def create(user_id, friend_id:, amount:, description:)
       user   = User.find(user_id)
       friend = user.friends.find(friend_id)

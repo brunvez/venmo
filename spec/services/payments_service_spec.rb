@@ -1,6 +1,47 @@
 require 'rails_helper'
 
 describe PaymentsService do
+  describe '.payments_for_user' do
+    let(:user) { create(:user) }
+    let(:max) { 10 }
+    let(:offset) { 0 }
+    let!(:other_payment) { create(:payment) }
+
+    subject { PaymentsService.payments_for_user(user, max, offset) }
+
+    context 'when the user received or sent payments' do
+      let!(:payments) { create_list(:payment, 2, sender: user) + create_list(:payment, 2, receiver: user) }
+
+      context 'when the max is bigger than the number of payments' do
+
+        it 'returns only the users payments' do
+          expect(subject).to match_array(payments)
+        end
+      end
+
+      context 'when the max is less than the number of payments' do
+        let(:max) { 3 }
+
+        it 'returns only that number of payments' do
+          expect(subject).to match_array(payments.first(3))
+        end
+      end
+
+      context 'when the offset is not 0' do
+        let(:offset) { 2 }
+
+        it 'returns the payments with an offset' do
+          expect(subject).to match_array(payments.last(2))
+        end
+      end
+    end
+
+    context 'when the user did not received or send payments' do
+
+      it { is_expected.to be_empty }
+    end
+  end
+
   describe '.create' do
     let(:user_account_balance) { 700 }
     let!(:user) { create(:user, account_balance: user_account_balance) }
