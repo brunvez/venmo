@@ -7,7 +7,11 @@ describe Payment, type: :model do
     it { is_expected.to belong_to(:receiver).class_name(User.to_s) }
     it { is_expected.to belong_to(:sender).class_name(User.to_s) }
 
-    it { is_expected.to validate_inclusion_of(:amount).in_range(0..1000) }
+    it do
+      is_expected.to validate_inclusion_of(:amount)
+                       .in_range(0..1000)
+                       .with_message('must be between 0 and 1000')
+    end
 
     context 'when the sender is the same as the receiver' do
       let(:sender) { create(:user) }

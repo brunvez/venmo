@@ -1,10 +1,13 @@
 class Payment < ApplicationRecord
-  MAX_AMOUNT = 1000
+  MAX_AMOUNT = 1000.0
 
   belongs_to :receiver, class_name: User.to_s
   belongs_to :sender, class_name: User.to_s
 
-  validates :amount, inclusion: { in: 0..MAX_AMOUNT }
+  validates :amount, inclusion: {
+    in: 0..MAX_AMOUNT,
+    message: I18n.t('api.errors.models.payment.amount_not_in_range', min: 0, max: MAX_AMOUNT.to_i)
+  }
   validate :no_self_payment
 
   private
